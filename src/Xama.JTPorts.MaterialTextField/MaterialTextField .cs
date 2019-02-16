@@ -29,6 +29,16 @@ namespace Xama.JTPorts.MaterialTextField
         protected bool hasFocus = false;
         protected int backgroundColor = -1;
         protected float reducedScale = 0.2f;
+        protected int heightInitial;
+
+        // public properties
+
+        public View Card => card;
+        public TextView Label => label;
+        public ImageView Image => image;
+        public EditText EditText => editText;
+        public ViewGroup EditTextLayout => editTextLayout;
+        public bool IsExpanded => expanded;
 
         public MaterialTextField(Context context) : base(context)
         {
@@ -47,11 +57,6 @@ namespace Xama.JTPorts.MaterialTextField
             Init();
         }
 
-        protected void Init()
-        {
-            inputMethodManager = (InputMethodManager)Context.GetSystemService(Context.InputMethodService);
-        }
-
         public void Toggle()
         {
             if (expanded)
@@ -68,7 +73,7 @@ namespace Xama.JTPorts.MaterialTextField
         {
             if (expanded)
             {
-                int heightInitial = Context.Resources.GetDimensionPixelOffset(Resource.Dimension.mtf_cardHeight_final);
+                heightInitial = Context.Resources.GetDimensionPixelOffset(Resource.Dimension.mtf_cardHeight_final);
 
                 ViewCompat.Animate(label)
                     .Alpha(1)
@@ -152,36 +157,6 @@ namespace Xama.JTPorts.MaterialTextField
             return this.backgroundColor;
         }
 
-        public View GetCard()
-        {
-            return card;
-        }
-
-        public TextView GetLabel()
-        {
-            return label;
-        }
-
-        public ImageView GetImage()
-        {
-            return image;
-        }
-
-        public EditText GetEditText()
-        {
-            return editText;
-        }
-
-        public ViewGroup GetEditTextLayout()
-        {
-            return editTextLayout;
-        }
-
-        public bool IsExpanded()
-        {
-            return expanded;
-        }
-
         public void SetHasFocus(bool hasFocus)
         {
             this.hasFocus = hasFocus;
@@ -190,13 +165,14 @@ namespace Xama.JTPorts.MaterialTextField
             {
                 Expand();
 
-                Runnable runnable = new Runnable(() =>
+                editText.PostDelayed(() =>
                 {
                     editText.RequestFocusFromTouch();
                     inputMethodManager.ShowSoftInput(editText, 0);
-                });
+                    // added as keyboard doesnt auto show on edit text visibility.
+                    inputMethodManager.ToggleSoftInput(ShowFlags.Forced, 0);
 
-                editText.PostDelayed(runnable, 300);
+                }, 300);
             }
             else
             {
@@ -204,32 +180,69 @@ namespace Xama.JTPorts.MaterialTextField
             }
         }
 
+        // listener methods
+
+        public void OnAnimationUpdate(View view)
+        {
+            float value = view.Alpha;
+            //percentage
+            card.LayoutParameters.Height = (int)(value * (heightInitial - cardCollapsedHeight) + cardCollapsedHeight);
+            card.RequestLayout();
+        }
+
+        public void OnAnimationCancel(View view)
+        {
+            //
+        }
+
+        public void OnAnimationEnd(View view)
+        {
+            if (!expanded)
+            {
+                editText.Visibility = ViewStates.Invisible;
+            }
+        }
+
+        public void OnAnimationStart(View view)
+        {
+            if (expanded)
+            {
+                editText.Visibility = ViewStates.Visible;
+            }
+        }
+
+        // internal library methods 
+
+        protected void Init()
+        {
+            inputMethodManager = (InputMethodManager)Context.GetSystemService(Context.InputMethodService);
+            ViewTreeObserver.GlobalFocusChange += ViewTreeObserver_GlobalFocusChange;
+        }
+
+        private void ViewTreeObserver_GlobalFocusChange(object sender, ViewTreeObserver.GlobalFocusChangeEventArgs e)
+        {
+            if (e.NewFocus != Card && e.NewFocus != Label && e.NewFocus != Image && e.NewFocus != EditText && e.NewFocus != EditTextLayout)
+            {
+                if(string.IsNullOrWhiteSpace(EditText.Text))
+                {
+                    Reduce();
+                }
+            } 
+        }
+
         protected void HandleAttributes(Context context, IAttributeSet attrs)
         {
             try
             {
                 TypedArray styledAttrs = context.ObtainStyledAttributes(attrs, Resource.Styleable.MaterialTextField);
-                {
-                    ANIMATION_DURATION = styledAttrs.GetInteger(Resource.Styleable.MaterialTextField_mtf_animationDuration, 400);
-                }
-                {
-                    OPEN_KEYBOARD_ON_FOCUS = styledAttrs.GetBoolean(Resource.Styleable.MaterialTextField_mtf_openKeyboardOnFocus, false);
-                }
-                {
-                    labelColor = styledAttrs.GetColor(Resource.Styleable.MaterialTextField_mtf_labelColor, -1);
-                }
-                {
-                    imageDrawableId = styledAttrs.GetResourceId(Resource.Styleable.MaterialTextField_mtf_image, -1);
-                }
-                {
-                    cardCollapsedHeight = styledAttrs.GetDimensionPixelOffset(Resource.Styleable.MaterialTextField_mtf_cardCollapsedHeight, context.Resources.GetDimensionPixelOffset(Resource.Dimension.mtf_cardHeight_initial));
-                }
-                {
-                    hasFocus = styledAttrs.GetBoolean(Resource.Styleable.MaterialTextField_mtf_hasFocus, false);
-                }
-                {
-                    backgroundColor = styledAttrs.GetColor(Resource.Styleable.MaterialTextField_mtf_backgroundColor, -1);
-                }
+
+                ANIMATION_DURATION = styledAttrs.GetInteger(Resource.Styleable.MaterialTextField_mtf_animationDuration, 400);
+                OPEN_KEYBOARD_ON_FOCUS = styledAttrs.GetBoolean(Resource.Styleable.MaterialTextField_mtf_openKeyboardOnFocus, true);
+                labelColor = styledAttrs.GetColor(Resource.Styleable.MaterialTextField_mtf_labelColor, -1);
+                imageDrawableId = styledAttrs.GetResourceId(Resource.Styleable.MaterialTextField_mtf_image, -1);
+                cardCollapsedHeight = styledAttrs.GetDimensionPixelOffset(Resource.Styleable.MaterialTextField_mtf_cardCollapsedHeight, context.Resources.GetDimensionPixelOffset(Resource.Dimension.mtf_cardHeight_initial));
+                hasFocus = styledAttrs.GetBoolean(Resource.Styleable.MaterialTextField_mtf_hasFocus, false);
+                backgroundColor = styledAttrs.GetColor(Resource.Styleable.MaterialTextField_mtf_backgroundColor, -1);
 
                 styledAttrs.Recycle();
             }
@@ -260,13 +273,14 @@ namespace Xama.JTPorts.MaterialTextField
 
             AddView(LayoutInflater.From(Context).Inflate(Resource.Layout.mtf_layout, this, false));
 
-            editTextLayout = (ViewGroup)FindViewById(R.id.mtf_editTextLayout);
+            editTextLayout = (ViewGroup)FindViewById(Resource.Id.mtf_editTextLayout);
             RemoveView(editText);
             editTextLayout.AddView(editText);
 
-            label = (TextView)FindViewById(R.id.mtf_label);
-            ViewCompat.SetPivotX(label, 0);
-            ViewCompat.SetPivotY(label, 0);
+            // replaced ViewCompat.SetPivotX and Y as they are deprecated.
+            label = (TextView)FindViewById(Resource.Id.mtf_label);
+            label.PivotX = 0;
+            label.PivotY = 0;
 
             if (editText.Hint != null)
             {
@@ -274,29 +288,44 @@ namespace Xama.JTPorts.MaterialTextField
                 editText.Hint = "";
             }
 
-            card = FindViewById(R.id.mtf_card);
+            card = FindViewById(Resource.Id.mtf_card);
 
             if (backgroundColor != -1)
             {
-                card.SetBackgroundColor(backgroundColor);
+                Color c;
+
+                try
+                {
+                    c = new Color(this.backgroundColor);
+                }
+                catch
+                {
+                    c = Color.White;
+                }
+
+                card.SetBackgroundColor(c);
             }
 
-            int expandedHeight = Context.Resources.GetDimensionPixelOffset(R.dimen.mtf_cardHeight_final);
+            int expandedHeight = Context.Resources.GetDimensionPixelOffset(Resource.Dimension.mtf_cardHeight_final);
             int reducedHeight = cardCollapsedHeight;
 
             reducedScale = (float)(reducedHeight * 1.0 / expandedHeight);
-            ViewCompat.SetScaleY(card, reducedScale);
-            ViewCompat.SetPivotY(card, expandedHeight);
+            card.ScaleY = reducedScale;
+            card.PivotY = expandedHeight;
 
-            image = (ImageView)FindViewById(R.id.mtf_image);
-            ViewCompat.SetAlpha(image, 0);
-            ViewCompat.SetScaleX(image, 0.4f);
-            ViewCompat.SetScaleY(image, 0.4f);
+            image = (ImageView)FindViewById(Resource.Id.mtf_image);
+            image.Alpha = 0;
+            image.ScaleX = 0.4f;
+            image.ScaleY = 0.4f;
 
-            ViewCompat.SetAlpha(editText, 0f);
+            editText.Alpha = 0f;
+
             editText.SetBackgroundColor(Color.Transparent);
 
-            //labelTopMargin = FrameLayout.LayoutParams.class.cast(label.getLayoutParams()).topMargin;
+            // Converted below code, so needs testing.
+            // FrameLayout.LayoutParams.class.cast(label.getLayoutParams()).topMargin;
+            ViewGroup.MarginLayoutParams lp = (ViewGroup.MarginLayoutParams)label.LayoutParameters;
+            labelTopMargin = lp.TopMargin;
 
             CustomizeFromAttributes();
 
@@ -312,37 +341,24 @@ namespace Xama.JTPorts.MaterialTextField
         {
             if (labelColor != -1)
             {
-                this.label.SetTextColor(labelColor);
+                Color c;
+
+                try
+                {
+                    c = new Color(this.labelColor);
+                }
+                catch
+                {
+                    c = Color.Black;
+                }
+
+                this.label.SetTextColor(c);
             }
 
             if (imageDrawableId != -1)
             {
                 this.image.SetImageDrawable(ContextCompat.GetDrawable(Context, imageDrawableId));
             }
-        }
-
-        public void OnAnimationUpdate(View view)
-        {
-            //TODO: do this
-            throw new System.NotImplementedException();
-        }
-
-        public void OnAnimationCancel(View view)
-        {
-            //TODO: do this
-            throw new System.NotImplementedException();
-        }
-
-        public void OnAnimationEnd(View view)
-        {
-            //TODO: do this
-            throw new System.NotImplementedException();
-        }
-
-        public void OnAnimationStart(View view)
-        {
-            //TODO: do this
-            throw new System.NotImplementedException();
         }
     }
 }
