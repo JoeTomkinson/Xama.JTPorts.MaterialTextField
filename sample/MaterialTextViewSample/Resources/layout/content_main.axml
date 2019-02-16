@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    android:background="#4885ed"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:showIn="@layout/activity_main">
+
+	    <Xama.JTPorts.MaterialTextField.MaterialTextField
+        android:id="@+id/mtvInput"
+        android:layout_marginTop="15dp"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        app:mtf_labelColor="@android:color/white"
+        app:mtf_image="@drawable/iconemail">
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Email Address"
+            android:inputType="textEmailAddress"
+            android:textColor="@android:color/black"
+            android:textSize="15sp" />
+
+    </Xama.JTPorts.MaterialTextField.MaterialTextField>
+
+    <Xama.JTPorts.MaterialTextField.MaterialTextField
+        android:id="@+id/mtvInputPassword"
+        android:layout_marginTop="15dp"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        app:mtf_labelColor="@android:color/white"
+        app:mtf_image="@drawable/iconlock">
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Password"
+            android:inputType="textPassword"
+            android:textColor="@android:color/black"
+            android:textSize="15sp" />
+
+    </Xama.JTPorts.MaterialTextField.MaterialTextField>
+
+</LinearLayout>
