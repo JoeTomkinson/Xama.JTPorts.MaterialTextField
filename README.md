@@ -9,6 +9,8 @@ Google Material Design - Xamarin.Android Text Field.
 
 This is a ported build, converted from Java to C# for use with the Xamarin MonoFramework. There are only minor additions to the original library, these include the removal of various deprecated dependancies.
 
+<br>
+
 ![!gif](https://github.com/DigitalSa1nt/Xama.JTPorts.MaterialTextField/blob/master/images/20190216_213539.gif?raw=true)
 
 <br>
