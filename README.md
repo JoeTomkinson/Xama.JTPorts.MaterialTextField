@@ -15,6 +15,10 @@ This is a ported build, converted from Java to C# for use with the Xamarin MonoF
 
 <br>
 
+# How to Install
+
+At the moment, until I create the nuget package you would need to download the src code, compile and build it, then simply reference the DLL in your Xamarin.Android Project. Or alternatively you could add the project as a project within your solution if you plan on adjusting any of the code for your own uses.
+
 # Basic Usage
 
 Create the control inside of your layout and wrap it around a single EditText control.
