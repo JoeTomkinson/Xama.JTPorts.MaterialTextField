@@ -17,7 +17,15 @@ This is a ported build, converted from Java to C# for use with the Xamarin MonoF
 
 # How to Install
 
-At the moment, until I create the nuget package you would need to download the src code, compile and build it, then simply reference the DLL in your Xamarin.Android Project. Or alternatively you could add the project as a project within your solution if you plan on adjusting any of the code for your own uses.
+![NugetIcon](https://raw.githubusercontent.com/DigitalSa1nt/Xama.JTPorts.MaterialTextField/master/images/nugetIcon.png)
+
+Simply add the following [Nuget Package](https://www.nuget.org/packages/Xama.JTPorts.MaterialTextField/1.0.2) to your Xamarin.Android App, and ensure you have the latest AndroidX dependancies installed, if you don't the code will tell you which ones are missing.
+
+- Install using Package Manager:
+> Install-Package Xama.JTPorts.MaterialTextField -Version 1.0.2
+
+- Install .NET CLI:
+> dotnet add package Xama.JTPorts.MaterialTextField --version 1.0.2
 
 # Basic Usage
 
