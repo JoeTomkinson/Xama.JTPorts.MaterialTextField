@@ -17,6 +17,18 @@
     <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
     <AndroidUseLatestPlatformSdk>false</AndroidUseLatestPlatformSdk>
     <TargetFrameworkVersion>v9.0</TargetFrameworkVersion>
+    <PackageId>Xama.JTPorts.MaterialTextField</PackageId>
+    <PackageVersion>1.0.0</PackageVersion>
+    <Description>Google Material Design - Xamarin.Android Text Field.</Description>
+    <Authors>Joe Tomkinson</Authors>
+    <Title>Xama.JTPorts.MaterialTextField</Title>
+    <Summary>Google Material Design - Xamarin.Android Text Field.</Summary>
+    <Owners>Joe Tomkinson</Owners>
+    <Copyright>2020</Copyright>
+    <PackageProjectUrl>https://github.com/DigitalSa1nt/Xama.JTPorts.MaterialTextField</PackageProjectUrl>
+    <PackageLicenseUrl>https://raw.githubusercontent.com/DigitalSa1nt/Xama.JTPorts.MaterialTextField/master/LICENSE</PackageLicenseUrl>
+    <NeutralLanguage> enGB</NeutralLanguage>
+    <PackageReleaseNotes>Release 1.0.0 - AndroidX Compatible Google Material Text Field control.</PackageReleaseNotes>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -68,6 +80,9 @@
     <PackageReference Include="Xamarin.AndroidX.AppCompat">
       <Version>1.1.0</Version>
     </PackageReference>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidAsset Include="Assets\nugetIcon.png" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
