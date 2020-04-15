@@ -21,6 +21,12 @@ This is a ported build, converted from Java to C# for use with the Xamarin MonoF
 
 Simply add the following [Nuget Package](https://www.nuget.org/packages/Xama.JTPorts.MaterialTextField/1.0.0) to your Xamarin.Android App, and ensure you have the latest AndroidX dependancies installed, if you don't the code will tell you which ones are missing.
 
+- Install using Package Manager:
+> Install-Package Xama.JTPorts.MaterialTextField -Version 1.0.1
+
+- Install .NET CLI:
+> dotnet add package Xama.JTPorts.MaterialTextField --version 1.0.1
+
 # Basic Usage
 
 Create the control inside of your layout and wrap it around a single EditText control.
