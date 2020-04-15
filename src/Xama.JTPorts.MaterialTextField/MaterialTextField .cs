@@ -1,12 +1,14 @@
 ﻿using Android.Content;
 using Android.Content.Res;
 using Android.Graphics;
-using Android.Support.V4.Content;
-using Android.Support.V4.View;
+//using Android.Support.V4.Content;
+//using Android.Support.V4.View;
 using Android.Util;
 using Android.Views;
 using Android.Views.InputMethods;
 using Android.Widget;
+using AndroidX.Core.Content;
+using AndroidX.Core.View;
 using Java.Lang;
 
 namespace Xama.JTPorts.MaterialTextField
@@ -100,7 +102,8 @@ namespace Xama.JTPorts.MaterialTextField
 
                 if (editText.HasFocus)
                 {
-                    inputMethodManager.HideSoftInputFromInputMethod(editText.WindowToken, 0);
+                    inputMethodManager.HideSoftInputFromWindow(editText.WindowToken, HideSoftInputFlags.None);
+                    //inputMethodManager.HideSoftInputFromInputMethod(editText.WindowToken, 0);
                     editText.ClearFocus();
                 }
 
@@ -223,11 +226,11 @@ namespace Xama.JTPorts.MaterialTextField
         {
             if (e.NewFocus != Card && e.NewFocus != Label && e.NewFocus != Image && e.NewFocus != EditText && e.NewFocus != EditTextLayout)
             {
-                if(string.IsNullOrWhiteSpace(EditText.Text))
+                if (string.IsNullOrWhiteSpace(EditText.Text))
                 {
                     Reduce();
                 }
-            } 
+            }
         }
 
         protected void HandleAttributes(Context context, IAttributeSet attrs)
