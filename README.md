@@ -67,7 +67,13 @@ You can supply the following attributes:
 
 These mostly have default values should you decide not to supply them
 
-# Useful?
+# Support 💎
+-----
+
+If you want to support the work that I do and you find this library useful? Support it by joining [**stargazers**](https://github.com/DigitalSa1nt/Xama.JTPorts.MaterialTextField/stargazers) for this repository ⭐️
+<br/>
+
+or alternatively if you want to you can also buy me a coffee.
 
 <a href="https://www.buymeacoffee.com/JTT" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/default-red.png" alt="Buy Me A Coffee" tyle="height: 41px !important;width: 174px !important;box-shadow: 0px 3px 2px 0px rgba(190, 190, 190, 0.5) !important;-webkit-box-shadow: 0px 3px 2px 0px rgba(190, 190, 190, 0.5) !important;" ></a>
 
